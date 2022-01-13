@@ -5,31 +5,62 @@ jobs:
   dockerdesktop:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-    - uses: docker-practice/actions-setup-docker@1.0.8
-    - run: |
-        brew install kind helm kubectl
-    # - run: ./run.sh
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
-      with:
-        limit-access-to-actor: true
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - uses: docker-practice/actions-setup-docker@1.0.8
+      - run: brew install kind helm
+      - run: ./run.sh
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: events.log
+          path: events.log
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: sps.yaml
+          path: sps.yaml
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: log-enricher.log
+          path: log-enricher.log
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: bpf-recorder.log
+          path: bpf-recorder.log
+      - name: Setup tmate session
+        if: always()
+        uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
+        with:
+          limit-access-to-actor: true
 
   podman:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-    - run: |
-        brew install podman
-        podman machine init --cpus=4 --memory=8096
-        podman machine start
-        podman system connection default podman-machine-default-root
-    # - run: ./run.sh
-    #   env:  
-    #     KIND_EXPERIMENTAL_PROVIDER: podman
-
-
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
-      with:
-        limit-access-to-actor: true
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - run: |
+          brew install podman
+          podman machine init --cpus=4 --memory=8096
+          podman machine start
+          podman system connection default podman-machine-default-root
+      - run: ./run.sh
+        env:  
+          KIND_EXPERIMENTAL_PROVIDER: podman
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: events.log
+          path: events.log
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: sps.yaml
+          path: sps.yaml
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: log-enricher.log
+          path: log-enricher.log
+      - uses: actions/upload-artifact@v2.3.1
+        with:
+          name: bpf-recorder.log
+          path: bpf-recorder.log
+      - name: Setup tmate session
+        if: always()
+        uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
+        with:
+          limit-access-to-actor: true
