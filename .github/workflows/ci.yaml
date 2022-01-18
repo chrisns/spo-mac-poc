@@ -6,22 +6,22 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - uses: docker-practice/actions-setup-docker@1.0.8
+      - uses: docker-practice/actions-setup-docker@51fd5009666ea5e3382fe125abf5d73d31386b59 # renovate: tag=1.0.8
       - run: brew install kind helm
       - run: ./run.sh
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: events.log
           path: events.log
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: sps.yaml
           path: sps.yaml
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: log-enricher.log
           path: log-enricher.log
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: bpf-recorder.log
           path: bpf-recorder.log
@@ -43,19 +43,19 @@ jobs:
       - run: ./run.sh
         env:  
           KIND_EXPERIMENTAL_PROVIDER: podman
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: events.log
           path: events.log
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: sps.yaml
           path: sps.yaml
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: log-enricher.log
           path: log-enricher.log
-      - uses: actions/upload-artifact@v2.3.1
+      - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
           name: bpf-recorder.log
           path: bpf-recorder.log
