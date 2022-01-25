@@ -6,8 +6,17 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        with:
+          repository: saschagrunert/security-profiles-operator
+          ref: custom-host-proc
+          path: security-profiles-operator
       - uses: docker-practice/actions-setup-docker@51fd5009666ea5e3382fe125abf5d73d31386b59 # renovate: tag=1.0.8
-      - run: brew install kind helm
+      # - run: brew install kind helm kubectl
+      - run: |
+          cd security-profiles-operator
+          make image CONTAINER_RUNTIME=docker
+          docker tag security-profiles-operator:latest localhost/security-profiles-operator:latest
       - run: ./run.sh
       - uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 # renovate: tag=v2.3.1
         with:
@@ -35,11 +44,20 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        with:
+          repository: saschagrunert/security-profiles-operator
+          ref: custom-host-proc
+          path: security-profiles-operator
       - run: |
-          brew install podman
+          brew install podman kind helm kubectl
           podman machine init --cpus=4 --memory=8096
           podman machine start
           podman system connection default podman-machine-default-root
+      - run: |
+          cd security-profiles-operator
+          make image CONTAINER_RUNTIME=podman
+          podman tag security-profiles-operator:latest localhost/security-profiles-operator:latest
       - run: ./run.sh
         env:  
           KIND_EXPERIMENTAL_PROVIDER: podman
