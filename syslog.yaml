@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: syslogd
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: syslogd
+  template:
+    metadata:
+      labels:
+        name: syslogd
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      hostPID: true
+      hostIPC: true
+
+      containers:
+        - name: syslogd
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - CAP_AUDIT_CONTROL
+                - CAP_AUDIT_READ
+                - CAP_AUDIT_WRITE
+                - CAP_SYS_NICE
+          image: alpine
+          args: 
+            - 'sh'
+            - '-c'
+            # - 'sleep 300000'
+            - |
+              sysctl -w kernel.printk_ratelimit=0 && \
+              sysctl -w kernel.printk_ratelimit_burst=0 && \
+              klogd && \
+              syslogd -n -O /var/log/syslog
+          volumeMounts:
+          - mountPath: /var/log
+            name: log
+      volumes:
+      - hostPath:
+          path: /var/log
+          type: DirectoryOrCreate
+        name: log
