@@ -6,3 +6,7 @@ networking:
 nodes:
   - role: control-plane
     image: kindest/node:v1.23.0
+    extraMounts:
+    - hostPath: /proc
+      containerPath: /hostproc
+      
