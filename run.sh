@@ -6,7 +6,7 @@ sed -i '' 's/https:\/\/:/https:\/\/localhost:/g' ~/.kube/config
 
 kind load docker-image localhost/security-profiles-operator:latest
 
-kubectl apply -f syslog.yaml
+kubectl apply -k github.com/chrisns/syslog-auditd
 kubectl --namespace kube-system wait --for condition=ready pods -l name=syslogd
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
