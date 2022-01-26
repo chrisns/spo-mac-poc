@@ -7,6 +7,7 @@ sed -i '' 's/https:\/\/:/https:\/\/localhost:/g' ~/.kube/config
 kind load docker-image localhost/security-profiles-operator:latest
 
 kubectl apply -f syslog.yaml
+kubectl --namespace kube-system wait --for condition=ready pods -l name=syslogd
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
 kubectl --namespace cert-manager wait --for condition=ready pod -l app.kubernetes.io/instance=cert-manager
@@ -19,18 +20,21 @@ cd ..
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-operator --replicas=1
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-webhook --replicas=1
 sleep 0.5
-kubectl --namespace security-profiles-operator wait --for condition=ready --timeout=-1s ds spod
-kubectl apply -f spod.yaml
-kubectl --namespace security-profiles-operator wait --for condition=ready --timeout=-1s spod spod
-# kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableLogEnricher":true,"enableBpfRecorder":true}}'
+
+kubectl --namespace security-profiles-operator wait --timeout=-1s --for condition=ready pods -l name=spod
+# kubectl apply -f spod.yaml
+# kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableBpfRecorder":true}}'
+kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"hostProcVolumePath":"/hostproc"}}'
+kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableLogEnricher":true}}'
+# kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableBpfRecorder":true}}'
+kubectl --namespace security-profiles-operator wait --timeout=-1s --for condition=ready pods -l name=spod
+
 
 # kubectl --namespace security-profiles-operator wait --for condition=ready --timeout=-1s ds spod
 kubectl apply -f https://raw.githubusercontent.com/appvia/security-profiles-operator-demo/main/demo-recorder.yaml
 
 kubectl run my-pod --image=nginx --labels app=demo
-
 kubectl wait --for condition=ready --timeout=-1s pod my-pod
-
 kubectl delete pod my-pod
 sleep 5
 
