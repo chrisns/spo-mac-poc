@@ -21,24 +21,24 @@ cd ..
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-webhook --replicas=1
 sleep 0.5
 
-kubectl --namespace security-profiles-operator wait --timeout=-1s --for condition=ready pods -l name=spod
+kubectl --namespace security-profiles-operator wait --timeout=360s --for condition=ready pods -l name=spod
 # kubectl apply -f spod.yaml
 # kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableBpfRecorder":true}}'
 kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"hostProcVolumePath":"/hostproc"}}'
 kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableLogEnricher":true}}'
 # kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableBpfRecorder":true}}'
-kubectl --namespace security-profiles-operator wait --timeout=-1s --for condition=ready pods -l name=spod
+kubectl --namespace security-profiles-operator wait --timeout=120s --for condition=ready pods -l name=spod
 
 
 # kubectl --namespace security-profiles-operator wait --for condition=ready --timeout=-1s ds spod
 kubectl apply -f https://raw.githubusercontent.com/appvia/security-profiles-operator-demo/main/demo-recorder.yaml
 
 kubectl run my-pod --image=nginx --labels app=demo
-kubectl wait --for condition=ready --timeout=-1s pod my-pod
+kubectl wait --for condition=ready --timeout=60s pod my-pod
 kubectl delete pod my-pod
 sleep 5
 
-kubectl wait --for condition=ready sp demo-recorder-my-pod
+kubectl wait --for condition=ready --timeout=60s sp demo-recorder-my-pod
 
 kubectl get events -A > events.log
 kubectl get sp -A -o yaml > sps.yaml
