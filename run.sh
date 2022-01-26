@@ -27,11 +27,14 @@ kubectl --namespace security-profiles-operator wait --timeout=360s --for conditi
 kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"hostProcVolumePath":"/hostproc"}}'
 kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableLogEnricher":true}}'
 # kubectl --namespace security-profiles-operator patch spod spod --type=merge -p '{"spec":{"enableBpfRecorder":true}}'
+sleep 2
 kubectl --namespace security-profiles-operator wait --timeout=120s --for condition=ready pods -l name=spod
 
 
 # kubectl --namespace security-profiles-operator wait --for condition=ready --timeout=-1s ds spod
 kubectl apply -f https://raw.githubusercontent.com/appvia/security-profiles-operator-demo/main/demo-recorder.yaml
+
+sleep 2
 
 kubectl run my-pod --image=nginx --labels app=demo
 kubectl wait --for condition=ready --timeout=60s pod my-pod
