@@ -9,7 +9,7 @@ kind load docker-image localhost/security-profiles-operator:latest
 kubectl apply -k github.com/chrisns/syslog-auditd
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
-kubectl --namespace cert-manager wait --for condition=ready pod -l app.kubernetes.io/instance=cert-manager
+kubectl --namespace cert-manager wait --timeout=360s --for condition=ready pod -l app.kubernetes.io/instance=cert-manager
 
 cd security-profiles-operator
 git apply <hack/deploy-localhost.patch
