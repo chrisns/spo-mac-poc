@@ -18,7 +18,7 @@ cd ..
 
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-operator --replicas=1
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-webhook --replicas=1
-sleep 2
+sleep 60
 
 kubectl --namespace security-profiles-operator wait --timeout=360s --for condition=ready pods -l name=spod
 # kubectl apply -f spod.yaml
