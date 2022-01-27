@@ -1,5 +1,5 @@
 #!/bin/bash
-# brew install kind helm kubectl
+set -e
 
 kind create cluster --config kind-config.yaml
 sed -i '' 's/https:\/\/:/https:\/\/localhost:/g' ~/.kube/config
@@ -7,7 +7,6 @@ sed -i '' 's/https:\/\/:/https:\/\/localhost:/g' ~/.kube/config
 kind load docker-image localhost/security-profiles-operator:latest
 
 kubectl apply -k github.com/chrisns/syslog-auditd
-kubectl --namespace kube-system wait --for condition=ready pods -l name=syslogd
 
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
 kubectl --namespace cert-manager wait --for condition=ready pod -l app.kubernetes.io/instance=cert-manager
@@ -19,7 +18,7 @@ cd ..
 
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-operator --replicas=1
 # kubectl scale --namespace security-profiles-operator deployment security-profiles-webhook --replicas=1
-sleep 0.5
+sleep 2
 
 kubectl --namespace security-profiles-operator wait --timeout=360s --for condition=ready pods -l name=spod
 # kubectl apply -f spod.yaml
