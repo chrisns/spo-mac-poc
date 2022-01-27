@@ -34,11 +34,11 @@ jobs:
         with:
           name: bpf-recorder.log
           path: bpf-recorder.log
-      - name: Setup tmate session
-        if: always()
-        uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
-        with:
-          limit-access-to-actor: true
+      # - name: Setup tmate session
+      #   if: always()
+      #   uses: mxschmitt/action-tmate@f309efdef7da88e388f96a3cafc4f181ac639f7a # renovate: tag=v3
+      #   with:
+      #     limit-access-to-actor: true
 
   podman:
     runs-on: macos-latest
