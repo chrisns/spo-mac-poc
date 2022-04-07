@@ -11,7 +11,7 @@ jobs:
           repository: saschagrunert/security-profiles-operator
           ref: custom-host-proc
           path: security-profiles-operator
-      - uses: docker-practice/actions-setup-docker@51fd5009666ea5e3382fe125abf5d73d31386b59 # renovate: tag=1.0.8
+      - uses: docker-practice/actions-setup-docker@9fafeb38361d5d48e5afc207293715e023b6cfe0 # tag=1.0.9
       - run: brew install kind helm
       - run: |
           cd security-profiles-operator
