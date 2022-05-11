@@ -8,8 +8,7 @@ jobs:
       - uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
       - uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
         with:
-          repository: saschagrunert/security-profiles-operator
-          ref: custom-host-proc
+          repository: kubernetes-sigs/security-profiles-operator
           path: security-profiles-operator
       - uses: docker-practice/actions-setup-docker@9fafeb38361d5d48e5afc207293715e023b6cfe0 # tag=1.0.9
       - run: brew install kind helm
@@ -46,8 +45,7 @@ jobs:
       - uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
       - uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
         with:
-          repository: saschagrunert/security-profiles-operator
-          ref: custom-host-proc
+          repository: kubernetes-sigs/security-profiles-operator
           path: security-profiles-operator
       - run: |
           brew install podman kind helm kubectl
